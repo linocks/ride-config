@@ -1,0 +1,41 @@
+
+spring:
+  config:
+    activate:
+      on-profile: cloud
+  cloud:
+    gateway:
+      routes:
+        - id: ride-booking-service
+          uri: http://ride-booking-service:9095
+          predicates:
+            - Path=/api/v1/rides/**
+        - id: ride-dispatch-service
+          uri: http://ride-dispatch-service:9096
+          predicates:
+            - Path=/api/v1/dispatch/**
+
+# eureka configuration
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka
+    registerWithEureka: true
+    fetchRegistry: true
+    registry-fetch-interval-seconds: 10
+    healthcheck:
+      enabled: true
+  instance:
+    hostname: eureka-server
+    preferIpAddress: false
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 30
+
+# # trace configuration
+# management:
+#   tracing:
+#     sampling:
+#       probability: 1.0
+
+server:
+  port: 8081
